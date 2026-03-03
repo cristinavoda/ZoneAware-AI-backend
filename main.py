@@ -8,6 +8,16 @@ from math import radians, sin, cos, sqrt, atan2
 
 from math import radians, sin, cos, sqrt, atan2
 
+load_dotenv(dotenv_path=".env/.env")
+
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+
+if not RAPIDAPI_KEY:
+    raise ValueError("RAPIDAPI_KEY no está definida")
+
+app = FastAPI()
+
+
 def calculate_distance(p1, p2):
     """
     Calcula distancia en metros entre dos puntos lat/lon
@@ -30,15 +40,6 @@ def calculate_distance(p1, p2):
     c = 2 * atan2(sqrt(a), sqrt(1-a))  
 
 
-
-load_dotenv(dotenv_path=".env/.env")
-
-RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-
-if not RAPIDAPI_KEY:
-    raise ValueError("RAPIDAPI_KEY no está definida")
-
-app = FastAPI()
 
 
 app.add_middleware(
