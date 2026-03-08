@@ -1,0 +1,32 @@
+
+# 🌍 Zoneaware AI - Backend
+
+**Lógica y funciones de cálculo de drones para Zoneaware AI**  
+
+Este repositorio contiene el **backend**:
+
+- Funciones de actualización de drones  
+- Cálculo de distancias (Haversine)  
+- Activación de QoD al entrar en zona crítica  
+- Preparado para integración con frontend (Streamlit, APIs, etc.)
+
+---
+
+## Estructura del repositorio
+
+---
+
+## Requisitos
+
+- Python 3.9+  
+- pandas  
+- numpy  
+
+Instalar dependencias:
+
+```bash
+pip install -r requirements.txt
+from backend.main import update_drones
+
+# Actualizar drones
+st.session_state.drones = update_drones(st.session_state.drones)
