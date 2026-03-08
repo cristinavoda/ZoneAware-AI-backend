@@ -7,7 +7,7 @@ from math import radians, sin, cos, sqrt, atan2
 from fastapi.middleware.cors import CORSMiddleware
 from math import radians, sin, cos, sqrt, atan2
 
-load_dotenv(dotenv_path=".env/.env")
+load_dotenv()
 
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 
