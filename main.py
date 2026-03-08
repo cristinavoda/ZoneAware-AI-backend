@@ -4,8 +4,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from math import radians, sin, cos, sqrt, atan2
-
-
+from fastapi.middleware.cors import CORSMiddleware
 from math import radians, sin, cos, sqrt, atan2
 
 load_dotenv(dotenv_path=".env/.env")
@@ -40,14 +39,21 @@ def calculate_distance(p1, p2):
     c = 2 * atan2(sqrt(a), sqrt(1-a))  
 
 
+from fastapi.middleware.cors import CORSMiddleware
 
+origins = [
+    "https://zoneaware-ai.netlify.app/",
+    "http://localhost:5500",  
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
+    allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
+
 
 HEADERS = {
     "X-RapidAPI-Key": RAPIDAPI_KEY,
@@ -97,3 +103,26 @@ GEOFENCE_RADIUS = 300
 def check_geofence(drone):
     distance = calculate_distance(drone, GEOFENCE_CENTER)
     return distance < GEOFENCE_RADIUS
+
+
+
+    CRITICAL_LAT = 41.395
+CRITICAL_LON = 2.180
+CRITICAL_RADIUS = 300
+
+def update_drones():
+    for drone in drones:
+
+       
+        if drone["id"] == "DR-003":
+            drone["lat"] += (CRITICAL_LAT - drone["lat"]) * 0.08
+            drone["lon"] += (CRITICAL_LON - drone["lon"]) * 0.08
+        else:
+            drone["lat"] += random.uniform(-0.0003, 0.0003)
+            drone["lon"] += random.uniform(-0.0003, 0.0003)
+
+        drone["battery"] -= random.uniform(0.1, 0.5)
+
+       
+        if drone["battery"] < 0:
+            drone["battery"] = 0
