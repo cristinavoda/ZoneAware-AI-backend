@@ -1,11 +1,23 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+
 import requests
 import os
 from dotenv import load_dotenv
-from math import radians, sin, cos, sqrt, atan2
 from fastapi.middleware.cors import CORSMiddleware
-from math import radians, sin, cos, sqrt, atan2
+app = FastAPI()
+
+origins = [
+    "http://localhost:5500",   
+    "https://tu-frontend.com"  
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 load_dotenv()
 
@@ -14,7 +26,20 @@ RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 if not RAPIDAPI_KEY:
     raise ValueError("RAPIDAPI_KEY no está definida")
 
-app = FastAPI()
+
+
+from math import radians, sin, cos, sqrt, atan2
+import random
+
+
+
+
+@app.get("/drones")
+def get_drones():
+    update_drones()
+    return drones
+
+
 
 
 def calculate_distance(p1, p2):
@@ -39,21 +64,14 @@ def calculate_distance(p1, p2):
     c = 2 * atan2(sqrt(a), sqrt(1-a))  
 
 
-from fastapi.middleware.cors import CORSMiddleware
 
-origins = [
-    "https://zoneaware-ai.netlify.app/",
-    "http://localhost:5500",  
-]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
-
 
 HEADERS = {
     "X-RapidAPI-Key": RAPIDAPI_KEY,
@@ -74,13 +92,12 @@ def get_device_location(phone_number: str):
     response = requests.get(url, headers=HEADERS, params=params)
     return response.json()
 
+
 drones = [
-   {"id": "DRONE-01", "status": "ACTIVE", "lat": 0.0, "lon": 0.0},
-    {"id": "DRONE-02", "status": "ACTIVE", "lat": 0.0, "lon": 0.0},
-    {"id": "DRONE-03", "status": "STANDBY", "lat": 0.0, "lon": 0.0}, 
+    {"id": "DR-001", "lat": 41.390, "lon": 2.170, "battery": 100},
+    {"id": "DR-002", "lat": 41.392, "lon": 2.175, "battery": 100},
+    {"id": "DR-003", "lat": 41.395, "lon": 2.178, "battery": 100},
 ]
-
-
 
 
 def evaluate_proximity():
@@ -105,8 +122,7 @@ def check_geofence(drone):
     return distance < GEOFENCE_RADIUS
 
 
-
-    CRITICAL_LAT = 41.395
+CRITICAL_LAT = 41.395
 CRITICAL_LON = 2.180
 CRITICAL_RADIUS = 300
 
