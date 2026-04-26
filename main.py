@@ -4,11 +4,16 @@ import requests
 import os
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
+
+from math import radians, sin, cos, sqrt, atan2
+import random
+
+
 app = FastAPI()
 
 origins = [
     "http://localhost:5500",   
-    "https://tu-frontend.com"  
+    "https://zoneaware-ai.netlify.app/"  
 ]
 
 app.add_middleware(
@@ -28,8 +33,6 @@ if not RAPIDAPI_KEY:
 
 
 
-from math import radians, sin, cos, sqrt, atan2
-import random
 
 
 
