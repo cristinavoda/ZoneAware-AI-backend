@@ -31,6 +31,12 @@ RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 if not RAPIDAPI_KEY:
     raise ValueError("RAPIDAPI_KEY no está definida")
 
+drones = [
+    {"id": "DR-001", "lat": 41.390, "lon": 2.170, "battery": 100},
+    {"id": "DR-002", "lat": 41.392, "lon": 2.175, "battery": 100},
+    {"id": "DR-003", "lat": 41.395, "lon": 2.178, "battery": 100},
+]
+
 
 @app.get("/")
 def root():
@@ -44,10 +50,13 @@ def root():
 
 @app.get("/drones")
 def get_drones():
-    update_drones()
+    
     return drones
 
-
+@app.post("/tick")
+def tick():
+    update_drones()
+    return {"ok": True}
 
 
 def calculate_distance(p1, p2):
@@ -101,11 +110,6 @@ def get_device_location(phone_number: str):
     return response.json()
 
 
-drones = [
-    {"id": "DR-001", "lat": 41.390, "lon": 2.170, "battery": 100},
-    {"id": "DR-002", "lat": 41.392, "lon": 2.175, "battery": 100},
-    {"id": "DR-003", "lat": 41.395, "lon": 2.178, "battery": 100},
-]
 
 
 def evaluate_proximity():
@@ -135,6 +139,7 @@ CRITICAL_LON = 2.180
 CRITICAL_RADIUS = 300
 
 def update_drones():
+    
     for drone in drones:
 
        
@@ -145,8 +150,18 @@ def update_drones():
             drone["lat"] += random.uniform(-0.0003, 0.0003)
             drone["lon"] += random.uniform(-0.0003, 0.0003)
 
-        drone["battery"] -= random.uniform(0.1, 0.5)
+        drone["battery"] -= random.uniform(0.01, 0.05)
 
        
         if drone["battery"] < 0:
-            drone["battery"] = 0
+            drone["battery"] -= 0.1
+
+
+           
+            
+@app.post("/update")
+def update():
+    update_drones()
+    return {"status": "updated"}
+            
+            
