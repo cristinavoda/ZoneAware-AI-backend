@@ -32,7 +32,12 @@ if not RAPIDAPI_KEY:
     raise ValueError("RAPIDAPI_KEY no está definida")
 
 
-
+@app.get("/")
+def root():
+    return {
+        "status": "ZoneAware AI running 🚀",
+        "endpoints": ["/drones", "/docs", "/geofencing"]
+    }
 
 
 
